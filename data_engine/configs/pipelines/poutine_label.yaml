@@ -1,0 +1,18 @@
+# Poutine pipeline — VLM pseudo-labeling input
+# Includes expert future trajectory for the VLM to label.
+
+dataset:
+  name: navsim
+  split: train
+
+enrichers:
+  - name: replace_image_base
+    params:
+      old_base: "/path/to/datasets/navsim"
+      new_base: "navsim"
+
+prompt: poutine_label
+
+output:
+  format: json
+  path: "./output/QA_navsim_train_poutine_label.json"

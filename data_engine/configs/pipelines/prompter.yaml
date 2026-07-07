@@ -1,0 +1,31 @@
+# Prompter pipeline — TGP-Prompter 2D-TGP regression (DVD pretraining)
+# Output: [PT, {"point_2d": [x, y], "heading": h}, ...] text format.
+
+dataset:
+  name: navsim
+  split: train
+
+enrichers:
+  - name: inject_bbox_path
+    params:
+      old_base: "/path/to/datasets/navsim"
+      new_base: "boxed_navsim"
+  - name: replace_image_base
+    params:
+      old_base: "/path/to/datasets/navsim"
+      new_base: "navsim"
+  - name: normalize_trajectory
+    params:
+      stats_file: "./stats/navsim_train_stats.json"
+  - name: project_2d_tgp
+    params:
+      image_height: 1080
+      image_width: 1920
+      target_height: 448
+      target_width: 784
+
+prompt: prompter
+
+output:
+  format: json
+  path: "./output/QA_navsim_train_prompter.json"

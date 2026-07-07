@@ -1,0 +1,12 @@
+# DriveTeach-VLA Data Engine — Global defaults
+
+paths:
+  stats_dir: "./stats"
+  output_dir: "./output"
+  cache_dir: "./cache"
+
+cache:
+  enabled: true
+
+runtime:
+  num_workers: 1

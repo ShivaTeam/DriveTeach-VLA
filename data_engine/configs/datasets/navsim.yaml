@@ -1,0 +1,16 @@
+# Navsim v2.0.0 dataset configuration
+# SceneFilter params (frame_interval, num_history_frames, log_names, has_route)
+# are read from the referenced YAML files — do not duplicate here.
+
+name: navsim
+
+splits:
+  train:
+    data_path: "/path/to/datasets/navsim/trainval_logs/trainval"
+    sensor_blobs_path: "/path/to/datasets/navsim/trainval_sensor_blobs/trainval"
+    log_names_file: "/path/to/navsim_workspace/navsim/navsim/planning/script/config/common/train_test_split/scene_filter/navtrain.yaml"
+
+  test:
+    data_path: "/path/to/datasets/navsim/test_navsim_logs/test"
+    sensor_blobs_path: "/path/to/datasets/navsim/test_sensor_blobs/test"
+    log_names_file: "/path/to/navsim_workspace/navsim/navsim/planning/script/config/common/train_test_split/scene_filter/navtest.yaml"
