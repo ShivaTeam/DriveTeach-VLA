@@ -27,9 +27,10 @@ DriveTeach-VLA uses a dual-model inference pass: the TGP-Prompter first predicts
 ## TODO
 
 - [x] Configurable Data Engine
-- [ ] Driving-aware Vision Distillation (DVD) code
-- [ ] LLaMA-Factory SFT configuration
+- [x] Driving-aware Vision Distillation (DVD) code
+- [x] LLaMA-Factory SFT configuration
 - [x] Reinforcement Learning code — available at [Curious-VLA](https://github.com/Mashiroln/curious_vla)
+- [ ] Release Annotations and Datasets
 
 ## Data Engine
 
@@ -51,7 +52,18 @@ Three built-in pipelines:
 python data_engine/main.py --config data_engine/configs/pipelines/planner.yaml
 ```
 
-See `data_engine/README.md` for full documentation.
+See the full [data engine documentation](https://github.com/ShivaTeam/DriveTeach-VLA/blob/master/data_engine/README.md).
+
+## Training
+
+The `dvd/` and `sft/` directory contains the DVD pretraining and SFT fine-tuning pipeline for LLaMA-Factory. The patched LLaMA-Factory supports custom DVD parameters in training YAMLs:
+- enable_dvd
+- dvd_h_size
+- dvd_w_size
+- dvd_tgp_weight
+- dvd_ema
+
+See the full [DVD documentation](https://github.com/ShivaTeam/DriveTeach-VLA/blob/master/dvd/README.md).
 
 ## Citation
 
