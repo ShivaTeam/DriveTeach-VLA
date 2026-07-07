@@ -1,0 +1,47 @@
+{
+    "QA_navsim_train_poutine_label":{
+        "file_name": "../output/QA_navsim_train_poutine_label.json",
+        "formatting": "sharegpt",
+        "columns": {
+            "messages": "conversations",
+            "images": "image",
+            "system": "system"
+        },
+        "tags": {
+            "role_tag": "from",
+            "content_tag": "value",
+            "user_tag": "human",
+            "assistant_tag": "gpt"
+        }
+    },
+    "QA_navsim_train_prompter":{
+        "file_name": "../output/QA_navsim_train_prompter.json",
+        "formatting": "sharegpt",
+        "columns": {
+            "messages": "conversations",
+            "images": "image",
+            "system": "system"
+        },
+        "tags": {
+            "role_tag": "from",
+            "content_tag": "value",
+            "user_tag": "human",
+            "assistant_tag": "gpt"
+        }
+    },
+	"QA_navsim_train_planner":{
+        "file_name": "../output/QA_navsim_train_planner.json",
+        "formatting": "sharegpt",
+        "columns": {
+            "messages": "conversations",
+            "images": "image",
+            "system": "system"
+        },
+        "tags": {
+            "role_tag": "from",
+            "content_tag": "value",
+            "user_tag": "human",
+            "assistant_tag": "gpt"
+        }
+    }
+}
