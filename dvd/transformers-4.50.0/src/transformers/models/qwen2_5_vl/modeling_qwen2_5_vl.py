@@ -1856,7 +1856,7 @@ class Qwen2_5_VLForConditionalGeneration(Qwen2_5_VLPreTrainedModel, GenerationMi
 
         image_grid_thw_teacher = None
         image_embeds_teacher = None
-        if getattr(self.config, "enable_dvd", False) and self.training:
+        if getattr(self.config, "enable_dvd", False):
             stu_pix, tch_pix = [], []
             stu_thw, tch_thw = [], []
             offset = 0
