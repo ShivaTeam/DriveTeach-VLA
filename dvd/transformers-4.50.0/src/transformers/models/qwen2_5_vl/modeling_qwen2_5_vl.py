@@ -2002,8 +2002,6 @@ class Qwen2_5_VLForConditionalGeneration(Qwen2_5_VLPreTrainedModel, GenerationMi
             attentions=outputs.attentions,
             rope_deltas=self.rope_deltas,
         )
-        if not image_embeds_teacher is None:
-            output["vit_loss"] = vit_loss.detach()
         return output
 
     def prepare_inputs_for_generation(
