@@ -151,6 +151,7 @@ def patch_config(
                 init_kwargs["offload_folder"] = model_args.offload_folder
 
     # DVD: inject distillation config before model loading
+    config.enable_dvd = model_args.enable_dvd
     if model_args.enable_dvd:
         config.h_size = model_args.dvd_h_size
         config.w_size = model_args.dvd_w_size
@@ -199,6 +200,10 @@ def patch_model(
         with torch.no_grad():
             for s_param, t_param in zip(model.visual.parameters(), model.visual_teacher.parameters()):
                 t_param.data.copy_(s_param.data)
+        s0 = next(model.visual.parameters())
+        t0 = next(model.visual_teacher.parameters())
+        diff = (s0 - t0).abs().mean().item()
+        logger.info(f"DVD teacher copy: |stu - tch| = {diff:.2e} (should be ~0)")
 
     if not model_args.use_unsloth:
         print_attn_implementation(model.config)

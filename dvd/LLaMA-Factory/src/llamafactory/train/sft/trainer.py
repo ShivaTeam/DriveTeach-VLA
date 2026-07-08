@@ -23,8 +23,6 @@ from typing import TYPE_CHECKING, Any, Optional, Union
 import numpy as np
 import torch
 from transformers import Seq2SeqTrainer
-from transformers.trainer import _is_peft_model
-from transformers.models.auto.modeling_auto import MODEL_FOR_CAUSAL_LM_MAPPING_NAMES
 from typing_extensions import override
 
 from ...extras import logging
@@ -104,51 +102,6 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
             return torch.utils.data.SequentialSampler(self.train_dataset)
 
         return super()._get_train_sampler(*args, **kwargs)
-
-    @override
-    def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
-        # Replicated from Trainer.compute_loss with vit_loss logging added
-        if (self.label_smoother is not None or self.compute_loss_func is not None) and "labels" in inputs:
-            labels = inputs.pop("labels")
-        else:
-            labels = None
-        if self.model_accepts_loss_kwargs:
-            loss_kwargs = {}
-            if num_items_in_batch is not None:
-                loss_kwargs["num_items_in_batch"] = num_items_in_batch
-            inputs = {**inputs, **loss_kwargs}
-
-        outputs = model(**inputs)
-
-        # DVD: log vit_loss
-        vit = outputs.get("vit_loss") if isinstance(outputs, dict) else getattr(outputs, "vit_loss", None)
-        if vit is not None:
-            self.log({"vit_loss": float(vit)})
-
-        if self.args.past_index >= 0:
-            self._past = outputs[self.args.past_index]
-
-        if labels is not None:
-            unwrapped_model = self.accelerator.unwrap_model(model)
-            if _is_peft_model(unwrapped_model):
-                model_name = unwrapped_model.base_model.model._get_name()
-            else:
-                model_name = unwrapped_model._get_name()
-            if self.compute_loss_func is not None:
-                loss = self.compute_loss_func(outputs, labels, num_items_in_batch=num_items_in_batch)
-            elif model_name in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.values():
-                loss = self.label_smoother(outputs, labels, shift_labels=True)
-            else:
-                loss = self.label_smoother(outputs, labels)
-        else:
-            if isinstance(outputs, dict) and "loss" not in outputs:
-                raise ValueError(
-                    "The model did not return a loss from the inputs, only the following keys: "
-                    f"{','.join(outputs.keys())}."
-                )
-            loss = outputs["loss"] if isinstance(outputs, dict) else outputs[0]
-
-        return (loss, outputs) if return_outputs else loss
 
     @override
     def prediction_step(

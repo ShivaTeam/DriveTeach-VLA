@@ -31,7 +31,10 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch_npu
+try:
+    import torch_npu
+except ImportError:
+    torch_npu = None
 from torch.nn import CrossEntropyLoss, SmoothL1Loss
 
 from ...activations import ACT2FN
@@ -161,7 +164,8 @@ class Qwen2_5_VisionPatchEmbed(nn.Module):
         hidden_states = hidden_states.view(
             -1, self.in_channels, self.temporal_patch_size, self.patch_size, self.patch_size
         )
-        hidden_states = torch_npu.npu_format_cast(hidden_states, 30)
+        if torch_npu is not None:
+            hidden_states = torch_npu.npu_format_cast(hidden_states, 30)
         hidden_states = self.proj(hidden_states.to(dtype=target_dtype)).view(-1, self.embed_dim)
         return hidden_states
 
@@ -1852,13 +1856,24 @@ class Qwen2_5_VLForConditionalGeneration(Qwen2_5_VLPreTrainedModel, GenerationMi
 
         image_grid_thw_teacher = None
         image_embeds_teacher = None
-        if image_grid_thw.shape[0] == 2:
-            len = image_grid_thw.shape[0] // 2
-            lim = pixel_values.shape[0] // image_grid_thw.shape[0] * 2
-            image_grid_thw_teacher = image_grid_thw[len:len*2]
-            pixel_values_teacher = pixel_values[lim:2*lim]
-            image_grid_thw = image_grid_thw[0:len]
-            pixel_values = pixel_values[0:lim]
+        if getattr(self.config, "enable_dvd", False) and self.training:
+            stu_pix, tch_pix = [], []
+            stu_thw, tch_thw = [], []
+            offset = 0
+            for i in range(image_grid_thw.shape[0]):
+                n = int(image_grid_thw[i].prod())
+                if i % 2 == 0:
+                    stu_pix.append(pixel_values[offset:offset + n])
+                    stu_thw.append(image_grid_thw[i:i + 1])
+                else:
+                    tch_pix.append(pixel_values[offset:offset + n])
+                    tch_thw.append(image_grid_thw[i:i + 1])
+                offset += n
+            pixel_values = torch.cat(stu_pix, dim=0)
+            image_grid_thw = torch.cat(stu_thw, dim=0)
+            if tch_pix:
+                pixel_values_teacher = torch.cat(tch_pix, dim=0)
+                image_grid_thw_teacher = torch.cat(tch_thw, dim=0)
 
         if inputs_embeds is None:
             inputs_embeds = self.model.embed_tokens(input_ids)
@@ -1969,7 +1984,11 @@ class Qwen2_5_VLForConditionalGeneration(Qwen2_5_VLPreTrainedModel, GenerationMi
             if not image_embeds_teacher is None:
                 h, w = image_grid_thw[0][1].item() // 2, image_grid_thw[0][2].item() // 2
                 vit_loss = calculate_regional_loss(image_embeds, image_embeds_teacher, h, w, self.h_size, self.w_size)
+                lm_item = loss.item()
                 loss = vit_loss + loss * self.vit_loss_weight
+                import torch.distributed as dist
+                if not dist.is_initialized() or dist.get_rank() == 0:
+                    print(f"[DVD] v={vit_loss.item():.4f} lm={lm_item:.4f} tot={loss.item():.4f}", end="  ", flush=True)
 
         if not return_dict:
             output = (logits,) + outputs[1:]

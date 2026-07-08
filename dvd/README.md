@@ -49,6 +49,8 @@ pip install deepspeed>=0.16.0
 cd ..
 ```
 
+The patched LLaMA-Factory is based on version 0.9.4 and the patched Transformers is based on version 4.50.0.
+
 ## Usage
 
 ### Step 1: Build training datasets
@@ -123,7 +125,6 @@ The following files were modified:
 | `LLaMA-Factory/src/.../data/loader.py` | Wired `enable_dvd` flag to dataset attributes |
 | `LLaMA-Factory/src/.../data/converter.py` | Append `bbox_image` to `_images` when DVD enabled |
 | `LLaMA-Factory/src/.../models/patcher.py` | Inject DVD config before model loading; copy student → teacher weights |
-| `LLaMA-Factory/src/.../train/sft/trainer.py` | Override `compute_loss` to log `vit_loss` |
 | `LLaMA-Factory/src/.../train/callbacks.py` | Added `DVDEMACallback` for EMA update |
 | `LLaMA-Factory/src/.../train/sft/workflow.py` | Wire callback; config verification log |
 | `transformers/.../modelsing_qwen2_5_vl.py` | Compute and expose `vit_loss` in model output |
