@@ -1981,7 +1981,7 @@ class Qwen2_5_VLForConditionalGeneration(Qwen2_5_VLPreTrainedModel, GenerationMi
             # Enable model parallelism
             shift_labels = shift_labels.to(shift_logits.device)
             loss = loss_fct(shift_logits, shift_labels)
-            if not image_embeds_teacher is None:
+            if self.training and not image_embeds_teacher is None:
                 h, w = image_grid_thw[0][1].item() // 2, image_grid_thw[0][2].item() // 2
                 vit_loss = calculate_regional_loss(image_embeds, image_embeds_teacher, h, w, self.h_size, self.w_size)
                 lm_item = loss.item()
