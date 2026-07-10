@@ -2,7 +2,7 @@
 
 **Teaching Vision-Language-Action Models What to See and Where to Look**
 
-[![Paper](https://img.shields.io/badge/Paper-ECCV%202026-blue)](https://arxiv.org/abs/2506.xxxxx) [![arXiv](https://img.shields.io/badge/arXiv-2607.01658-red)](https://arxiv.org/abs/2607.01658) [![License](https://img.shields.io/badge/License-Apache%202.0-green)](https://github.com/ShivaTeam/DriveTeach-VLA/blob/master/LICENSE)
+[![Paper](https://img.shields.io/badge/Paper-ECCV%202026-blue)](https://arxiv.org/abs/2607.01658) [![arXiv](https://img.shields.io/badge/arXiv-2607.01658-red)](https://arxiv.org/abs/2607.01658) [![License](https://img.shields.io/badge/License-Apache%202.0-green)](https://github.com/ShivaTeam/DriveTeach-VLA/blob/master/LICENSE)
 
 🎉 [2026.06.24] Our paper has been accepted by ECCV 2026.
 
