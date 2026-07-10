@@ -24,7 +24,7 @@ DriveTeach-VLA introduces a vision-guided learning pipeline:
 
 DriveTeach-VLA uses a dual-model inference pass: the TGP-Prompter first predicts 2D-TGP from the front-view image, then the TGP-Planner generates the BEV trajectory conditioned on the predicted 2D-TGP.
 
-## TODO
+## Release
 
 - [x] Configurable Data Engine
 - [x] Driving-aware Vision Distillation (DVD) code
