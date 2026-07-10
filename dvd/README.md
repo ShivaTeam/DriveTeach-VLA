@@ -120,11 +120,11 @@ The following files were modified:
 
 | File | Change |
 |------|--------|
-| `LLaMA-Factory/src/.../hparams/model_args.py` | Added `enable_dvd`, `dvd_h_size`, `dvd_w_size`, `dvd_tgp_weight`, `dvd_ema` fields |
-| `LLaMA-Factory/src/.../data/parser.py` | Added `enable_dvd` to `DatasetAttr` |
-| `LLaMA-Factory/src/.../data/loader.py` | Wired `enable_dvd` flag to dataset attributes |
-| `LLaMA-Factory/src/.../data/converter.py` | Append `bbox_image` to `_images` when DVD enabled |
-| `LLaMA-Factory/src/.../models/patcher.py` | Inject DVD config before model loading; copy student → teacher weights |
-| `LLaMA-Factory/src/.../train/callbacks.py` | Added `DVDEMACallback` for EMA update |
-| `LLaMA-Factory/src/.../train/sft/workflow.py` | Wire callback; config verification log |
-| `transformers/.../modelsing_qwen2_5_vl.py` | Compute and expose `vit_loss` in model output |
+| `LLaMA-Factory/src/llamafactory/hparams/model_args.py` | Added `enable_dvd`, `dvd_h_size`, `dvd_w_size`, `dvd_tgp_weight`, `dvd_ema` fields |
+| `LLaMA-Factory/src/llamafactory/data/parser.py` | Added `enable_dvd` to `DatasetAttr` |
+| `LLaMA-Factory/src/llamafactory/data/loader.py` | Wired `enable_dvd` flag to dataset attributes |
+| `LLaMA-Factory/src/llamafactory/data/converter.py` | Append `bbox_image` to `_images` when DVD enabled |
+| `LLaMA-Factory/src/llamafactory/model/patcher.py` | Inject DVD config before model loading; copy student → teacher weights |
+| `LLaMA-Factory/src/llamafactory/train/callbacks.py` | Added `DVDEMACallback` for EMA update |
+| `LLaMA-Factory/src/llamafactory/train/sft/workflow.py` | Wire callback; config verification log |
+| `transformers-4.50.0/src/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py` | Compute and expose `vit_loss` in model output |
