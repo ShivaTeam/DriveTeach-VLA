@@ -30,7 +30,7 @@ DriveTeach-VLA uses a dual-model inference pass: the TGP-Prompter first predicts
 - [x] Driving-aware Vision Distillation (DVD) code
 - [x] LLaMA-Factory SFT configuration
 - [x] Reinforcement Learning code — available at [Curious-VLA](https://github.com/Mashiroln/curious_vla)
-- [ ] Release Annotations and Datasets
+- [x] Annotations and Datasets are available at [Google Drive](https://drive.google.com/drive/folders/1oOz6EVfsrxGvOXvYkwxNhcgqjYP-LqSa?usp=drive_link)
 
 ## Data Engine
 
